@@ -68,11 +68,11 @@ int main(){
     cout << endl;*/
 
     ofstream ofs, ofs2;
-    ofs.open("/home/ldap-users/siang/Desktop/NWC_software/check_AE/algo_asn.txt");
-    ofs2.open("/home/ldap-users/siang/Desktop/NWC_software/check_in_place/algo_asn.txt");
+    ofs.open("./check_AE/algo_asn.txt");
+    ofs2.open("./check_in_place/algo_asn.txt");
 
-    long long n = 256;
-    long long modular = 12289;
+    long long n = 8192;
+    long long modular = 65537;
     long long phi = find_phi(n, modular);
     long long prou = ExpMod(phi, 2, modular);
 
@@ -96,7 +96,7 @@ int main(){
     cout << endl;
     long long radix_mem = 16;
     long long log_radix = log2(radix_mem);
-    mixed_radix_NWC(mixed_radix_out, data_in, n, log_radix, log_radix, phi, modular);
+    mixed_radix_NWC(mixed_radix_out, data_in, n, log_radix, 1, phi, modular);
 
     cout << "output" << endl;
     BitOperate BR;

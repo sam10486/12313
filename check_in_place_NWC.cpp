@@ -15,8 +15,8 @@ using namespace NTL;
 
 int main(){
     ifstream  ifs1, ifs2;
-    ifs1.open("/home/ldap-users/siang/Desktop/NWC_software/check_in_place/algo_asn.txt");
-    ifs2.open("/home/ldap-users/siang/Desktop/NWC_software/check_in_place/memory_ans.txt");
+    ifs1.open("./check_in_place/algo_asn.txt");
+    ifs2.open("./check_in_place/memory_ans.txt");
     
     vector<long long > algo_asn_array;
     vector<long long > memory_ans_array;

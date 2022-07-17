@@ -30,7 +30,7 @@ int main(){
     vector<vector<long long> > memory;
 
     ofstream ofs;
-    ofs.open("/home/ldap-users/siang/Desktop/NWC_software/check_in_place/memory_ans.txt");
+    ofs.open("./check_in_place/memory_ans.txt");
 
     memory.resize(BN);
     for(int i=0; i<BN; i++){

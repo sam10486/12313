@@ -34,11 +34,11 @@ R16_BU: main_R16_BU.o
 	$(CC) -o main_R16_BU.exe main_R16_BU.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
 	./main_R16_BU.exe
 
-test_AGU: main_test_AGU.o
+AGU_tb: main_test_AGU.o
 	$(CC) -o main_test_AGU.exe main_test_AGU.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
 	./main_test_AGU.exe
 
-test_mem: main_test_mem.o
+mem_tb: main_test_mem.o
 	$(CC) -o main_test_mem.exe main_test_mem.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
 	./main_test_mem.exe
 
