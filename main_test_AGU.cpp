@@ -41,7 +41,7 @@ int main(){
     }else {
         //k radix 2^k1 NTTs
         for(long long l=0; l<k; l++){
-            //cout << endl;
+            cout << "QQQQ l = " << l << endl;
             cout << "----j means group number, i means numbers of BU in one group----" << endl;
             for(int j=0; j<pow(2, radix_k1*l); j++){
                 long long j_bar = BR.BitReserve(j, radix_k1*l);

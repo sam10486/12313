@@ -30,7 +30,7 @@ barrett: main_barrett.o
 	$(CC) -o main_barrett.exe main_barrett.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
 	./main_barrett.exe
 
-R16_BU: main_R16_BU.o
+R16_tb: main_R16_BU.o
 	$(CC) -o main_R16_BU.exe main_R16_BU.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
 	./main_R16_BU.exe
 
@@ -50,19 +50,22 @@ top_tb: main_top_tb.o
 	$(CC) -o main_top_tb.exe main_top_tb.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
 	./main_top_tb.exe
 
+tmp: tmp.o
+	$(CC) -o tmp.exe tmp.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
+	./tmp.exe
+
 main.o: main.cpp
-main_CF.o: main_CF.cpp
 main_AE.o: main_AE.cpp
 main_BU.o: main_BU.cpp
 main_R16_BU.o: main_R16_BU.cpp
 main_barrett.o: main_barrett.cpp
-main_radix_test.o: main_radix_test.cpp
 test_file.o: test_file.cpp
 test_file_mem_AE.o: test_file_mem_AE.cpp
 check_AE_NWC.o: check_AE_NWC.cpp
 check_in_place_NWC.o: check_in_place_NWC.cpp
 test_file_in_place.o: test_file_in_place.cpp
 main_test_AGU.o: main_test_AGU.cpp
+main_test_mem.o: main_test_mem.cpp
 main_TF_gen_tb.o: main_TF_gen_tb.cpp
 main_top_tb.o: main_top_tb.cpp
 

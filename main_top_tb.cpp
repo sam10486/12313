@@ -50,9 +50,9 @@ int main(){
         for(int i=0; i<n; i++){
             input_idx[i] = i;
             data_in[i] = i;
-            cout << "data_in[" << i << "] = " << data_in[i] << endl;
+            //cout << "data_in[" << i << "] = " << data_in[i] << endl;
             mem_init_in_place(memory, data_in[i], input_idx[i], n, radix, modular);
-            cout << "------------" << endl;
+            //cout << "------------" << endl;
         }
         
         cout << "CCCCCCC" << endl;
@@ -108,6 +108,7 @@ void top(   long long *NWC_data, long long *NWC_data_in,
                 long long m_bar = BR.BitReserve( (pow(2, radix_k1*l)-1) * pow(2, floor(log2(m))) + m, log2(n) ); 
                 W[m] = ExpMod(phi, m_bar, modular);
                 ofs_TF_based << std::hex << W[m] << endl;
+                //cout << m_bar << endl;
                 cout << "W[" << m << "] = " << W[m] << endl;
             }
             cout << "----j means group number, i means numbers of BU in one group----" << endl;
@@ -118,9 +119,15 @@ void top(   long long *NWC_data, long long *NWC_data_in,
                         long long index = j_bar * pow(2, log2(n) - radix_k1*l) + m * pow(2, log2(n) - radix_k1*(l+1)) + i;
                         long long mem_Read_Data = mem_in_place(memory, 0, index, n, pow_radix_k1, 1, 0);
                         tmp[m] = mem_Read_Data;
-                        cout << index << ", ";
+                        //cout << index << ", ";
                     }
-                    power2_NTT(tmp_array, tmp, pow(2, radix_k1), W, modular); 
+
+                    power2_NTT(tmp_array, tmp, pow(2, radix_k1), W, modular);
+
+                    /*for(int i=0; i<pow(2, radix_k1); i++){
+                        cout << "tmp_array[" << i << "] = " << tmp_array[i] << endl;
+                    }*/
+                
                     for(int m=0; m<pow(2, radix_k1); m++){
                         long long index = j_bar * pow(2, log2(n) - radix_k1*l) + m * pow(2, log2(n) - radix_k1*(l+1)) + i;
                         mem_in_place(memory, tmp_array[m], index, n, pow_radix_k1, 0, 1);

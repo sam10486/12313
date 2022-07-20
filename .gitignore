@@ -3,3 +3,6 @@
 *.o
 *.exe
 *.log
+tmp.cpp
+tmp.o
+tmp.exe

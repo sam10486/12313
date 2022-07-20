@@ -7,6 +7,7 @@
 #include <vector>
 #include <NTL/ZZ.h>
 #include <algorithm>
+#include <fstream>
 
 using namespace std;
 using namespace NTL;
@@ -639,31 +640,37 @@ long long power2_NTT(   long long *NTT_data, long long *data_in, long long n,
                         long long *twiddle_array, long long modular){
     
     long long W;
-    for(int i=0;i<n;i++)
+    cout << "data_in = " << endl;
+    for(int i=0;i<n;i++){
         cout << data_in[i] << " ";
-        //cout << twiddle_array[i] << " ";
+    }  
+    cout << endl << "twiddle = " << endl;
+    for(int i=0;i<n;i++){
+        cout << twiddle_array[i] << " ";
+    }      
     cout << endl;
-    //cout << "n = " << n << endl;
     for(int h=1; h<n; h = 2 * h){
         for(int j=0; j<h; j++){
             W = twiddle_array[h+j];
-            //cout << "h = " << h << endl;
-            //cout << "j = " << j << endl;
-            //cout << "W[" << h+j << "]= " << W << endl;
+            cout << "twiddle_array[" << h+j << "] = " << twiddle_array[h+j] << endl;
             for(int i=(j*n)/h; i< ( (2*j+1)*n ) / (2*h) ; i++){
                 long long tmp = MulMod(W, data_in[i + n/(2*h)], modular);
-                //cout << "data_in[" << i + n/(2*h) << "] = " << data_in[i + n/(2*h)] << endl;
-                //cout << "tmp = " << tmp << endl;
+                cout << "data_in[i + n/(2*h)] = " << data_in[i + n/(2*h)] << ", tmp = " << tmp << endl;
                 data_in[i + n/(2*h)] = SubMod(data_in[i], tmp, modular);
                 data_in[i] = AddMod(data_in[i], tmp, modular);
-                //cout << "data_in[" << i << "] = " << data_in[i] << endl;
-                //cout << "data_in[" << i + n/(2*h) << "] = " << data_in[i + n/(2*h)] << endl;
+
+                cout << "ANS_data_in[i + n/(2*h)] = " << data_in[i + n/(2*h)] << ", ANS_data_in[i] = " << data_in[i] << endl;
             }
         }
     }
     for(int i=0; i<n; i++){
         NTT_data[i] = data_in[i];
     }
+    cout << endl << "NTT_data = " << endl;
+    for(int i=0;i<n;i++){
+        cout << NTT_data[i] << " ";
+    }  
+    cout << endl;
     return 0;
 }
 
@@ -671,6 +678,13 @@ long long mixed_radix_NWC(  long long *NWC_data, long long *NWC_data_in,
                             long long n, long long radix_k1, long long radix_k2, long long phi, 
                             long long modular){
 
+    ofstream ofs;
+    ofs.open("../tb_data/test/algo_ans.txt");
+    if(!ofs.is_open()){
+        cout << "failed to open file.\n" << endl;
+    }else {
+        cout << "opened!" << endl;
+    }
     long long k = ( log2(n) - radix_k2) / radix_k1;
     //cout << "k = " << k << endl;
     long long parameter_check = radix_k1 * k + radix_k2;
@@ -734,13 +748,17 @@ long long mixed_radix_NWC(  long long *NWC_data, long long *NWC_data_in,
             }
             cout << endl;
         }
-        for(int i=0; i<n; i++)
+        for(int i=0; i<n; i++){
             cout << NWC_data_in[i] << " ";
+        }
         cout << endl;
     }
-    /*for(int i=0; i<n; i++)
-        cout << NWC_data_in[i] << " ";
-    cout << endl;*/
+    for(int i=0; i<n; i++){
+        //cout << NWC_data_in[i] << " ";
+        ofs << std::dec << NWC_data_in[i] << endl;
+    }
+        
+    cout << endl;
 
     cout << "---*******************-------" << endl;
     int element_num_k2 = pow(2, radix_k2);
@@ -1452,38 +1470,29 @@ long long mem_in_place(vector<vector<long long> > &memory, long long data_in, lo
     vector<long long> Order = BO.DecToBin(input_idx, bit_width_N);
 
     int Order_tmp_size = (delta * (bank_upper_bound+1)) - (delta * bank_upper_bound);
-    //cout << "Order_tmp_size = " << Order_tmp_size << endl;
     vector<long long> Order_tmp(Order_tmp_size);
-    //cout << "bank_upper_bound = " << bank_upper_bound << ", delta = " << delta << endl;
 
 
     for(int i=0; i<=bank_upper_bound; i++){
         int Order_start = delta * i;
         int Order_end = delta * (i+1) - 1;
-        //cout << "------------" << endl;
-        //cout << "Order_end = " << Order_end << ", Order_start = " << Order_start << ", bit_width_N = " << bit_width_N << endl;
         for(int j=Order_start; j<=Order_end; j++){
-            //cout << "Order[" << j << "] = " << Order[j] << endl;
-            //cout << j << "-" << Order_start << " = " << j-Order_start << endl;
             Order_tmp[j-Order_start] = Order[j];
-            //cout << "Order_tmp[" << j-Order_start << "] = " << Order_tmp[j-Order_start] << endl;
         }
 
-        /*for(int i=0; i<Order_tmp_size; i++)
-            cout << "Order_tmp[" << i << "] = " << Order_tmp[i] << endl;*/
         long long integer_Order_tmp = BO.VecToInt(Order_tmp, pow(2,Order_tmp_size));
-        //cout << "integer_Order_tmp = " << integer_Order_tmp << endl;
         Bank = AddMod(Bank, integer_Order_tmp, radix);
-        //cout << "Bank = " << Bank << endl;
     }
     long long Addr = input_idx >> delta;
 
-    //cout << "Bank = " << Bank << ", Addr = " << Addr << ", data_in = " << data_in << endl;
+
     if(Read_mode){
         long long Read_data_out = memory[Bank][Addr];
+        cout << "(Bank , Addr, Read_data_out) = " << "( " << Bank << ", " << Addr << ", " << Read_data_out << " )" << endl;
         return Read_data_out;
     }else if(Write_mode){
         memory[Bank][Addr] = data_in;
+        cout << "(Bank , Addr, W_data_in) = " << "( " << Bank << ", " << Addr << ", " << memory[Bank][Addr] << " )" << endl;
     }
     return 0;
 

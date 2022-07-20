@@ -50,10 +50,10 @@ int main(){
         }
     }
 
-    cout << "QQ" << endl;
-    ofs_AGU_k1_BN.open("/home/ldap-users/siang/Desktop/NWC_verilog/N26094891/sim/data_file/mem/mem_algo_bank.txt");
-    ofs_AGU_k1_MA.open("/home/ldap-users/siang/Desktop/NWC_verilog/N26094891/sim/data_file/mem/mem_algo_MA.txt");
-    ofs_mem_data.open("/home/ldap-users/siang/Desktop/NWC_verilog/N26094891/sim/data_file/mem/mem_algo_data.txt");
+    cout << "QQ123" << endl;
+    ofs_AGU_k1_BN.open("../tb_data/mem/mem_algo_bank.txt");
+    ofs_AGU_k1_MA.open("../tb_data/mem/mem_algo_MA.txt");
+    ofs_mem_data.open("../tb_data/mem/mem_algo_data.txt");
     long long delta = log2(pow_radix_k1);
 
     if(!ofs_AGU_k1_BN.is_open() || !ofs_AGU_k1_MA.is_open() || !ofs_mem_data.is_open()){
