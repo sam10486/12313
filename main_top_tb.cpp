@@ -108,7 +108,6 @@ void top(   long long *NWC_data, long long *NWC_data_in,
                 long long m_bar = BR.BitReserve( (pow(2, radix_k1*l)-1) * pow(2, floor(log2(m))) + m, log2(n) ); 
                 W[m] = ExpMod(phi, m_bar, modular);
                 ofs_TF_based << std::hex << W[m] << endl;
-                //cout << m_bar << endl;
                 cout << "W[" << m << "] = " << W[m] << endl;
             }
             cout << "----j means group number, i means numbers of BU in one group----" << endl;
