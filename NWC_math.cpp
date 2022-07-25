@@ -655,12 +655,13 @@ long long power2_NTT(   long long *NTT_data, long long *data_in, long long n,
             cout << "twiddle_array[" << h+j << "] = " << twiddle_array[h+j] << endl;
             for(int i=(j*n)/h; i< ( (2*j+1)*n ) / (2*h) ; i++){
                 long long tmp = MulMod(W, data_in[i + n/(2*h)], modular);
-                cout << "data_in[i + n/(2*h)] = " << data_in[i + n/(2*h)] << ", tmp = " << tmp << endl;
+                cout << "data_in[i] = " << data_in[i] << ", data_in[i + n/(2*h)] = " << data_in[i + n/(2*h)] << ", tmp = " << tmp << endl;
                 data_in[i + n/(2*h)] = SubMod(data_in[i], tmp, modular);
                 data_in[i] = AddMod(data_in[i], tmp, modular);
 
                 cout << "ANS_data_in[i + n/(2*h)] = " << data_in[i + n/(2*h)] << ", ANS_data_in[i] = " << data_in[i] << endl;
             }
+            cout << "-------------------------------------" << endl;
         }
     }
     for(int i=0; i<n; i++){
