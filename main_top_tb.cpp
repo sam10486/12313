@@ -107,8 +107,8 @@ void top(   long long *NWC_data, long long *NWC_data_in,
             for(long long m=1; m<pow(2, radix_k1); m++){
                 long long m_bar = BR.BitReserve( (pow(2, radix_k1*l)-1) * pow(2, floor(log2(m))) + m, log2(n) ); 
                 W[m] = ExpMod(phi, m_bar, modular);
-                ofs_TF_based << std::hex << W[m] << endl;
-                cout << "W[" << m << "] = " << W[m] << endl;
+                //ofs_TF_based << std::hex << W[m] << endl;
+                //cout << "W[" << m << "] = " << W[m] << endl;
             }
             cout << "----j means group number, i means numbers of BU in one group----" << endl;
             for(int j=0; j<pow(2, radix_k1*l); j++){
@@ -123,9 +123,6 @@ void top(   long long *NWC_data, long long *NWC_data_in,
 
                     power2_NTT(tmp_array, tmp, pow(2, radix_k1), W, modular);
 
-                    /*for(int i=0; i<pow(2, radix_k1); i++){
-                        cout << "tmp_array[" << i << "] = " << tmp_array[i] << endl;
-                    }*/
                 
                     for(int m=0; m<pow(2, radix_k1); m++){
                         long long index = j_bar * pow(2, log2(n) - radix_k1*l) + m * pow(2, log2(n) - radix_k1*(l+1)) + i;
@@ -153,5 +150,69 @@ void top(   long long *NWC_data, long long *NWC_data_in,
                 ofs_TF_const << std::hex << ExpMod(phi, pow(2, i), modular) << endl;
             }
         }
+
+
+        //---------generate TF---------
+        for(long long l=0; l<k; l++){
+            cout << "<<<<<<<l>>>>>>>> = " << l << endl << "m_bar = ";
+            for(long long m=1; m<pow(2, radix_k1); m++){
+                long long m_bar = BR.BitReserve( (pow(2, radix_k1*l)-1) * pow(2, floor(log2(m))) + m, log2(n) ); 
+                W[m] = ExpMod(phi, m_bar, modular);
+                //ofs_TF_based << std::hex << W[m] << endl;
+                //cout << "W[" << m << "] = " << W[m] << endl;
+            }
+            cout << "----j means group number, i means numbers of BU in one group----" << endl;
+            for(int j=0; j<pow(2, radix_k1*l); j++){          
+
+                switch(l){
+                    case 0: {
+                        if(j < 1){
+                            for(long long m=1; m<pow(2, radix_k1); m++){
+                                ofs_TF_based << std::hex << W[m] << endl;
+                                cout << "W[" << m << "] = " << W[m] << endl;
+                            }
+                        }
+                    }
+                    break;
+                    case 1: {
+                        if(j < 1){
+                            for(long long m=1; m<pow(2, radix_k1); m++){
+                                ofs_TF_based << std::hex << W[m] << endl;
+                                cout << "W[" << m << "] = " << W[m] << endl;
+                            }
+                        }
+                    }
+                    break;
+                    case 2: {
+                        if(j < 2) {
+                            for(long long m=1; m<pow(2, radix_k1); m++){
+                                ofs_TF_based << std::hex << W[m] << endl;
+                                cout << "W[" << m << "] = " << W[m] << endl;
+                            }
+                        }
+                    }
+                    break;
+                    default: break;
+                }
+
+
+                for(int m=1; m<pow(2, radix_k1); m++){
+                    long long Wc_degree = log2(n) - radix_k1 * l - floor(log2(m));
+                    if(Wc_degree != log2(n))
+                        Wc_degree = pow(2, Wc_degree);
+                    else 
+                        Wc_degree = 0;
+                    long long Wc = ExpMod(phi, Wc_degree, modular);
+                    W[m] = MulMod(W[m], Wc, modular);
+                }
+            }
+        }
+
+
+
+
+
+
+
     }
 }
