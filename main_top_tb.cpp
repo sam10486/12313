@@ -36,10 +36,12 @@ int main(){
     vector<vector<long long> > memory;
 
     ofstream ofs_mem_data_in, ofs_mem_data_golden;
+    ifstream ifs_ans_algo;
     ofs_mem_data_in.open("../tb_data/top/mem_data_in.txt");
     ofs_mem_data_golden.open("../tb_data/top/mem_data_golden.txt");
+    ifs_ans_algo.open("./check_in_place/memory_ans.txt");
     
-    if(!ofs_mem_data_in.is_open()){
+    if(!ofs_mem_data_in.is_open() || !ifs_ans_algo.is_open() ){
         cout << "failed to open file.\n" << endl;
     }else {
         memory.resize(BN);
@@ -67,11 +69,45 @@ int main(){
         top(data_out, data_in, n, log_radix, 1, phi, modular, memory);
 
         cout << "GGGG" << endl;
-        for(int i=0; i<MA; i++){
-            for(int j=0; j<BN; j++){
-                cout << "memory[" << j << "][" << i << "] = " << memory[j][i] << endl;
-                ofs_mem_data_golden << std::hex << memory[j][i] << endl;
+        for(int i=0; i<BN; i++){
+            for(int j=0; j<MA; j++){
+                cout << "memory[" << i << "][" << j << "] = " << memory[i][j] << endl;
+                ofs_mem_data_golden << std::hex << memory[i][j] << endl;
             }
+        }
+
+
+        //---------check ans----------
+         vector<vector<long long> > algo_matrix;
+        long long algo_ans;
+        algo_matrix.resize(BN);
+        for(int i=0; i<BN; i++){
+            algo_matrix[i].resize(MA);
+        }
+        for(int i=0; i<BN; i++){
+            for(int j=0; j<MA; j++){
+                ifs_ans_algo >> algo_ans;
+                algo_matrix[i][j] = algo_ans;
+                //cout << "algo_ans = " << algo_ans << endl;
+            }
+        }
+        int err = 0;
+        for(int i=0; i<BN; i++){
+            for(int j=0; j<MA; j++){
+                //cout << "algo_matrix[" << i << "][" << j << "] = " << algo_matrix[i][j] << endl;
+                if( memory[i][j] == algo_matrix[i][j] ){
+                    cout << "num " << i*MA+j << " is PASS!" << endl;
+                }else{
+                    cout << "ERROR!, memory[" << i << "][" << j << "] is " << memory[i][j] 
+                         << ", and algo_matrix[" << i << "][" << j << "] is " << algo_matrix[i][j] << endl;
+                    err++;
+                }
+            }
+        }
+        if(err == 0){
+            cout << "ALL PASS!!" << endl;
+        }else {
+            cout << "ERROR...." << endl;
         }
     }
 }
@@ -143,13 +179,55 @@ void top(   long long *NWC_data, long long *NWC_data_in,
         for(int i=0; i<=log2(n); i++){
             long long Wc;
             if(i == log2(n)){
-                cout << "Wc = " << 1 << endl;
+                //cout << "Wc = " << 1 << endl;
                 ofs_TF_const << std::hex << 1 << endl;
             }else{
-                cout << "Wc = " << ExpMod(phi, pow(2, i), modular) << endl;
+                //cout << "Wc = " << ExpMod(phi, pow(2, i), modular) << endl;
                 ofs_TF_const << std::hex << ExpMod(phi, pow(2, i), modular) << endl;
             }
         }
+
+        //---------------k2 stage------------------
+        cout << "---*******************-------" << endl;
+        int pow_radix_k2 = pow(2, radix_k2);
+        long long W_k2[pow_radix_k2 - 1] = {0} ;
+        long long tmp_k2[pow_radix_k2] = {0} ;
+        long long tmp_array_k2[pow_radix_k2] = {0};
+        // radix_2^k2 NTT
+        for(int m=1; m<pow(2, radix_k2); m++){
+            long long idx = (pow(2, radix_k1*k) - 1) * pow(2, floor(log2(m))) + m;
+            long long m_bar = BR.BitReserve(idx, log2(n));
+            W_k2[m] = ExpMod(phi, m_bar, modular);
+        }
+        for(int j=0; j<pow(2, radix_k1 * k); j++){
+            long long j_bar = BR.BitReserve(j, radix_k1 * k);
+            for(int m=0; m<pow(2, radix_k2); m++){
+                int idx = j_bar * pow(2, radix_k2) + m;
+                long long mem_Read_Data_k2_stage = mem_in_place(memory, 0, idx, n, pow_radix_k1, 1, 0);
+                tmp_k2[m] = mem_Read_Data_k2_stage;
+            }
+
+            power2_NTT(tmp_array_k2, tmp_k2, pow(2,radix_k2), W_k2, modular);
+            for(int m=0; m<pow(2, radix_k2); m++){
+                int idx = j_bar * pow(2, radix_k2) + m;
+                mem_in_place(memory, tmp_array_k2[m], idx, n, pow_radix_k1, 0, 1);
+            }
+            for(int m=1; m<pow(2, radix_k2); m++){
+                long long Wc_degree_k2 = radix_k2 - floor(log2(m));
+                Wc_degree_k2 = pow(2, Wc_degree_k2);
+                long long Wc_k2 = ExpMod(phi, Wc_degree_k2, modular);
+                W_k2[m] = MulMod(W_k2[m], Wc_k2, modular);
+            }
+        }
+
+
+
+
+
+
+
+
+
 
 
         //---------generate TF---------
@@ -158,8 +236,6 @@ void top(   long long *NWC_data, long long *NWC_data_in,
             for(long long m=1; m<pow(2, radix_k1); m++){
                 long long m_bar = BR.BitReserve( (pow(2, radix_k1*l)-1) * pow(2, floor(log2(m))) + m, log2(n) ); 
                 W[m] = ExpMod(phi, m_bar, modular);
-                //ofs_TF_based << std::hex << W[m] << endl;
-                //cout << "W[" << m << "] = " << W[m] << endl;
             }
             cout << "----j means group number, i means numbers of BU in one group----" << endl;
             for(int j=0; j<pow(2, radix_k1*l); j++){          
@@ -169,7 +245,7 @@ void top(   long long *NWC_data, long long *NWC_data_in,
                         if(j < 1){
                             for(long long m=1; m<pow(2, radix_k1); m++){
                                 ofs_TF_based << std::hex << W[m] << endl;
-                                cout << "W[" << m << "] = " << W[m] << endl;
+                                //cout << "W[" << m << "] = " << W[m] << endl;
                             }
                         }
                     }
@@ -178,7 +254,7 @@ void top(   long long *NWC_data, long long *NWC_data_in,
                         if(j < 1){
                             for(long long m=1; m<pow(2, radix_k1); m++){
                                 ofs_TF_based << std::hex << W[m] << endl;
-                                cout << "W[" << m << "] = " << W[m] << endl;
+                                //cout << "W[" << m << "] = " << W[m] << endl;
                             }
                         }
                     }
@@ -187,7 +263,7 @@ void top(   long long *NWC_data, long long *NWC_data_in,
                         if(j < 2) {
                             for(long long m=1; m<pow(2, radix_k1); m++){
                                 ofs_TF_based << std::hex << W[m] << endl;
-                                cout << "W[" << m << "] = " << W[m] << endl;
+                                //cout << "W[" << m << "] = " << W[m] << endl;
                             }
                         }
                     }
@@ -205,6 +281,28 @@ void top(   long long *NWC_data, long long *NWC_data_in,
                     long long Wc = ExpMod(phi, Wc_degree, modular);
                     W[m] = MulMod(W[m], Wc, modular);
                 }
+            }
+        }
+        //------generate TF part k2-----------
+        cout << "--------k2 TF---------" << endl;
+        for(int m=1; m<pow(2, radix_k2); m++){
+            long long idx = (pow(2, radix_k1*k) - 1) * pow(2, floor(log2(m))) + m;
+            long long m_bar = BR.BitReserve(idx, log2(n));
+            W_k2[m] = ExpMod(phi, m_bar, modular);
+        }
+        for(int j=0; j<pow(2, radix_k1 * k); j++){
+            if(j<4){
+                cout << "j = " << j << endl;
+                for(int m=1; m<pow(2, radix_k2); m++){
+                    ofs_TF_based << std::hex << W_k2[m] << endl;
+                    cout << "W_k2[" << m << "] = " << W_k2[m] << endl;
+                }
+            }
+            for(int m=1; m<pow(2, radix_k2); m++){
+                long long Wc_degree_k2 = radix_k2 - floor(log2(m));
+                Wc_degree_k2 = pow(2, Wc_degree_k2);
+                long long Wc_k2 = ExpMod(phi, Wc_degree_k2, modular);
+                W_k2[m] = MulMod(W_k2[m], Wc_k2, modular);
             }
         }
 
