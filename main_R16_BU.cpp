@@ -23,7 +23,7 @@ int main(){
 
     long long n=16;
     //long long prime = find_prime(1, 30);
-    long long prime = 65537;
+    long long prime = 786433;
     //long long twiddle = find_phi(n, prime);
     long long twiddle = 15;
     cout << "twiddle = " << twiddle << endl;
@@ -36,37 +36,20 @@ int main(){
         cout << "failed to open file.\n" << endl;
     }else {
         vector<long long> a(n);
-        /*for(int i=0; i<n; i++){
+        for(int i=0; i<n; i++){
             long long x = unif(generator);
             ofs_input_pattern << std::hex << i << endl;
             a.at(i) = i;
-        }*/
-
-        a.at(0) = 0;
-        a.at(1) = 512;
-        a.at(2) = 1024;
-        a.at(3) = 1536;
-        a.at(4) = 2048;
-        a.at(5) = 2560;
-        a.at(6) = 3072;
-        a.at(7) = 3584;
-        a.at(8) = 4096;
-        a.at(9) = 4608;
-        a.at(10) = 5120;
-        a.at(11) = 5632;
-        a.at(12) = 6144;
-        a.at(13) = 6656;
-        a.at(14) = 7168;
-        a.at(15) = 7680;
+        }
         
-        long long phi = find_phi(16, prime);
+        long long phi = find_phi(n, prime);
         for(int i=0; i<n;i++){
             ofs_twiddle << std::hex << ExpMod(phi, i, prime) << endl;
         }
 
         vector<long long> NTT_forward_vec ;
         
-        NTT_forward_vec = NWC(a, n, 15, prime); 
+        NTT_forward_vec = NWC_forward(a, n, prime); 
         for(int i=0; i<n; i++){
             ofs_output_pattern << std::hex << NTT_forward_vec.at(i) << endl;
         }
@@ -75,7 +58,7 @@ int main(){
 
 
         vector<long long> NTT_backward_vec ;
-        NTT_backward_vec = INWC(NTT_forward_vec, n, 15, prime);
+        NTT_backward_vec = NWC_backward(NTT_forward_vec, n, prime);
         int flag;
         for(int i=0; i<n; i++){
             if(NTT_backward_vec.at(i) != a.at(i)){

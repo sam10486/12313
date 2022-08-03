@@ -206,7 +206,7 @@ void top(   long long *NWC_data, long long *NWC_data_in,
                 long long mem_Read_Data_k2_stage = mem_in_place(memory, 0, idx, n, pow_radix_k1, 1, 0);
                 tmp_k2[m] = mem_Read_Data_k2_stage;
             }
-
+            cout << "j = " << j << endl;
             power2_NTT(tmp_array_k2, tmp_k2, pow(2,radix_k2), W_k2, modular);
             for(int m=0; m<pow(2, radix_k2); m++){
                 int idx = j_bar * pow(2, radix_k2) + m;
@@ -291,11 +291,14 @@ void top(   long long *NWC_data, long long *NWC_data_in,
             W_k2[m] = ExpMod(phi, m_bar, modular);
         }
         for(int j=0; j<pow(2, radix_k1 * k); j++){
-            if(j<4){
+            if(j==0 || j==2){
                 cout << "j = " << j << endl;
                 for(int m=1; m<pow(2, radix_k2); m++){
                     ofs_TF_based << std::hex << W_k2[m] << endl;
                     cout << "W_k2[" << m << "] = " << W_k2[m] << endl;
+                }
+                for(int i=pow(2, radix_k2); i<pow(2, radix_k1); i++){
+                    ofs_TF_based << std::hex << 0 << endl;
                 }
             }
             for(int m=1; m<pow(2, radix_k2); m++){
