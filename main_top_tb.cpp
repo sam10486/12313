@@ -291,7 +291,7 @@ void top(   long long *NWC_data, long long *NWC_data_in,
             W_k2[m] = ExpMod(phi, m_bar, modular);
         }
         for(int j=0; j<pow(2, radix_k1 * k); j++){
-            if(j==0 || j==2){
+            if(j==0){
                 cout << "j = " << j << endl;
                 for(int m=1; m<pow(2, radix_k2); m++){
                     ofs_TF_based << std::hex << W_k2[m] << endl;
