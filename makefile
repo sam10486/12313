@@ -15,7 +15,6 @@ main: main.o main_AE.o main_R16_BU.o main_barrett.o \
 	$(CC) -o main_R16_BU.exe main_R16_BU.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
 	$(CC) -o main_barrett.exe main_barrett.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
 	$(CC) -o test_file.exe test_file.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
-	$(CC) -o check_in_place_NWC.exe check_in_place_NWC.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
 	$(CC) -o test_file_in_place.exe test_file_in_place.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
 
 AE: main_AE.o
@@ -50,9 +49,9 @@ top_tb: main_top_tb.o
 	$(CC) -o main_top_tb.exe main_top_tb.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
 	./main_top_tb.exe
 
-tmp: tmp.o
-	$(CC) -o tmp.exe tmp.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
-	./tmp.exe
+check_mem_out: check_in_place_NWC.o
+	$(CC) -o check_in_place_NWC.exe check_in_place_NWC.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
+	./check_in_place_NWC.exe
 
 main.o: main.cpp
 main_AE.o: main_AE.cpp
