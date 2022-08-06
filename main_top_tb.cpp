@@ -26,8 +26,9 @@ int main(){
     long long data_in[n];
     long long data_out[n];
     long long radix = 16;
-    long long modular = 65537;
+    long long modular = 2013265921;
     long long phi = find_phi(n, modular);
+    //long long phi = 243624;
     cout << "phi = " << phi << endl;
 
     int BN = radix;

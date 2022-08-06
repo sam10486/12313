@@ -10,11 +10,8 @@ LIBS += -framework CoreFoundation
 
 main: main.o main_AE.o main_R16_BU.o main_barrett.o \
 		test_file.o test_file_in_place.o check_in_place_NWC.o build		
-	$(CC) -o main.exe main.o NWC_math.o	BitOperate.o NWC.o -lntl -lgmp -lm
-	$(CC) -o main_AE.exe main_AE.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
 	$(CC) -o main_R16_BU.exe main_R16_BU.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
 	$(CC) -o main_barrett.exe main_barrett.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
-	$(CC) -o test_file.exe test_file.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
 	$(CC) -o test_file_in_place.exe test_file_in_place.o NWC_math.o BitOperate.o NWC.o -lntl -lgmp -lm
 
 AE: main_AE.o

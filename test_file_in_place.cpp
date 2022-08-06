@@ -19,8 +19,9 @@ int main(){
     long long data_in[n];
     long long data_out[n];
     long long radix = 16;
-    long long modular = 65537;
+    long long modular = 2013265921;
     long long phi = find_phi(n, modular);
+    //long long phi = 243624;
     cout << "phi = " << phi << endl;
     BitOperate BR;
 
@@ -37,12 +38,12 @@ int main(){
         memory[i].resize(MA);
     }
 
-    for(int i=0; i<BN; i++){
+    /*for(int i=0; i<BN; i++){
         for(int j=0; j<MA; j++){
             cout << "memory[" << i << "][" << j << "] = " << memory[i][j] << endl;
         }
-    }
-
+    }*/
+    
     for(int i=0; i<n; i++){
         input_idx[i] = i;
         data_in[i] = i;
@@ -50,19 +51,19 @@ int main(){
         mem_init_in_place(memory, data_in[i], input_idx[i], n, radix, modular);
         cout << "------------" << endl;
     }
-
+    /*
     for(int i=0; i<BN; i++){
         cout << "------------" << endl;
         for(int j=0; j<MA; j++){
             cout << "memory[" << i << "][" << j << "] = " << memory[i][j] << endl;
         }
-    }
+    }*/
     cout << "-----------------" << endl;
 
     long long log_radix = log2(radix);
     mixed_radix_NWC_in_place(data_out, data_in, n, log_radix, 1, phi, modular, memory);
 
-    cout << "-----------------" << endl;
+    cout << "---GGGGGGGGGGG------" << endl;
     for(int i=0; i<BN; i++){
         cout << "------------" << endl;
         for(int j=0; j<MA; j++){
