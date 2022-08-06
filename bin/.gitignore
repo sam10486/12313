@@ -1,0 +1,5 @@
+#Ignore everything .o in this directory
+*
+
+# Except this file
+!.gitignore

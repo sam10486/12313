@@ -1,8 +1,8 @@
 #.gitignore
 
-*.o
-*.exe
-*.log
-tmp.cpp
-tmp.o
-tmp.exe
+/before_makefile_revised/*.o
+/before_makefile_revised/*.exe
+/before_makefile_revised/*.log
+/before_makefile_revised/tmp.cpp
+/before_makefile_revised/tmp.o
+/before_makefile_revised/tmp.exe
