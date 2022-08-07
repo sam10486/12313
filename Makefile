@@ -16,7 +16,7 @@ LIBS	:= -lntl -lgmp -lm
 INCLUDE	:= -I $(INC)
 TARGET	:= $(BIN)/main
 
-all: $(TARGET)
+all: main #$(TARGET)
 
 $(MAIN_OBJS):$(OBJ)/%.o: $(UTIL)/%.cpp
 	$(CC) -c $< -o $@ $(INCLUDE)

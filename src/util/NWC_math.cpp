@@ -692,7 +692,7 @@ long long mixed_radix_NWC(  long long *NWC_data, long long *NWC_data_in,
     assert(parameter_check == log2(n));
 
     int element_num = pow(2, radix_k1);
-    long long W[element_num - 1] = {0};
+    long long W[element_num] = {0};
     long long tmp[element_num] = {0} ;
     long long tmp_array[element_num] = {0};
     BitOperate BR;
@@ -763,7 +763,7 @@ long long mixed_radix_NWC(  long long *NWC_data, long long *NWC_data_in,
 
     cout << "---*******************-------" << endl;
     int element_num_k2 = pow(2, radix_k2);
-    long long W_k2[element_num_k2 - 1] = {0} ;
+    long long W_k2[element_num_k2] = {0} ;
     long long tmp_k2[element_num_k2] = {0} ;
     long long tmp_array_k2[element_num_k2] = {0};
     // radix_2^k2 NTT
@@ -1334,7 +1334,7 @@ long long mixed_radix_NWC_in_place(  long long *NWC_data, long long *NWC_data_in
     assert(parameter_check == log2(n));
 
     int pow_radix_k1 = pow(2, radix_k1);
-    long long W[pow_radix_k1 - 1] = {0};
+    long long W[pow_radix_k1] = {0};
     long long tmp[pow_radix_k1] = {0} ;
     long long tmp_array[pow_radix_k1] = {0};
     BitOperate BR;
@@ -1404,7 +1404,7 @@ long long mixed_radix_NWC_in_place(  long long *NWC_data, long long *NWC_data_in
     
     cout << "---*******************-------" << endl;
     int pow_radix_k2 = pow(2, radix_k2);
-    long long W_k2[pow_radix_k2 - 1] = {0} ;
+    long long W_k2[pow_radix_k2] = {0} ;
     long long tmp_k2[pow_radix_k2] = {0} ;
     long long tmp_array_k2[pow_radix_k2] = {0};
     // radix_2^k2 NTT
@@ -1587,3 +1587,392 @@ ZZ precompute_value(ZZ modular, long long bit_width, long long alpha){
     return result;
 }
 
+
+long long power2_NTT(   ZZ *NTT_data, ZZ *data_in, long long n, 
+                        ZZ *twiddle_array, ZZ modular){
+    
+    ZZ W;
+    cout << "data_in = " << endl;
+    for(int i=0;i<n;i++){
+        cout << data_in[i] << " ";
+    }  
+    cout << endl << "twiddle = " << endl;
+    for(int i=0;i<n;i++){
+        cout << twiddle_array[i] << " ";
+    }      
+    cout << endl;
+    for(int h=1; h<n; h = 2 * h){
+        for(int j=0; j<h; j++){
+            W = twiddle_array[h+j];
+            cout << "twiddle_array[" << h+j << "] = " << twiddle_array[h+j] << endl;
+            for(int i=(j*n)/h; i< ( (2*j+1)*n ) / (2*h) ; i++){
+                ZZ tmp = PowerMod(W, data_in[i + n/(2*h)], modular);
+                cout << "data_in[i] = " << data_in[i] << ", data_in[i + n/(2*h)] = " << data_in[i + n/(2*h)] << ", tmp = " << tmp << endl;
+                data_in[i + n/(2*h)] = SubMod(data_in[i], tmp, modular);
+                data_in[i] = AddMod(data_in[i], tmp, modular);
+
+                cout << "ANS_data_in[i + n/(2*h)] = " << data_in[i + n/(2*h)] << ", ANS_data_in[i] = " << data_in[i] << endl;
+            }
+            cout << "-------------------------------------" << endl;
+        }
+    }
+    for(int i=0; i<n; i++){
+        NTT_data[i] = data_in[i];
+    }
+    cout << endl << "NTT_data = " << endl;
+    for(int i=0;i<n;i++){
+        cout << NTT_data[i] << " ";
+    }  
+    cout << endl;
+    return 0;
+}
+
+long long mem_init_in_place(vector<vector<ZZ> > &memory_init, ZZ data_in, long long input_idx, long long N, long long radix,
+                            ZZ modular){
+    BitOperate BO;
+    long long Bank = 0;
+    long long delta = log2(radix);
+    long long bank_upper_bound = floor((log2(N)) / delta);
+    long long bit_width_N = delta * (bank_upper_bound+1);
+    vector<long long> Order = BO.DecToBin(input_idx, bit_width_N);
+
+    int Order_tmp_size = (delta * (bank_upper_bound+1)) - (delta * bank_upper_bound);
+    vector<long long> Order_tmp(Order_tmp_size);
+
+
+    for(int i=0; i<=bank_upper_bound; i++){
+        int Order_start = delta * i;
+        int Order_end = delta * (i+1) - 1;
+        for(int j=Order_start; j<=Order_end; j++){
+            Order_tmp[j-Order_start] = Order[j];
+        }
+
+        long long integer_Order_tmp = BO.VecToInt(Order_tmp, pow(2,Order_tmp_size));
+        Bank = AddMod(Bank, integer_Order_tmp, radix);
+    }
+    long long Addr = input_idx >> delta;
+    memory_init[Bank][Addr] = data_in;
+    return 0;
+}
+
+
+ZZ mem_in_place(vector<vector<ZZ> > &memory, ZZ data_in, long long input_idx, long long N, long long radix,
+                        long long Read_mode, long long Write_mode){
+    BitOperate BO;
+    long long Bank = 0;
+    long long delta = log2(radix);
+    long long bank_upper_bound = floor((log2(N)) / delta);
+    long long bit_width_N = delta * (bank_upper_bound+1);
+    vector<long long> Order = BO.DecToBin(input_idx, bit_width_N);
+
+    int Order_tmp_size = (delta * (bank_upper_bound+1)) - (delta * bank_upper_bound);
+    vector<long long> Order_tmp(Order_tmp_size);
+
+
+    for(int i=0; i<=bank_upper_bound; i++){
+        int Order_start = delta * i;
+        int Order_end = delta * (i+1) - 1;
+        for(int j=Order_start; j<=Order_end; j++){
+            Order_tmp[j-Order_start] = Order[j];
+        }
+
+        long long integer_Order_tmp = BO.VecToInt(Order_tmp, pow(2,Order_tmp_size));
+        Bank = AddMod(Bank, integer_Order_tmp, radix);
+    }
+    long long Addr = input_idx >> delta;
+
+
+    if(Read_mode){
+        ZZ Read_data_out = memory[Bank][Addr];
+        cout << "(Bank , Addr, Read_data_out) = " << "( " << Bank << ", " << Addr << ", " << Read_data_out << " )" << endl;
+        return Read_data_out;
+    }else if(Write_mode){
+        memory[Bank][Addr] = data_in;
+        cout << "(Bank , Addr, W_data_in) = " << "( " << Bank << ", " << Addr << ", " << memory[Bank][Addr] << " )" << endl;
+    }
+
+    return (ZZ)0;
+}
+
+long long mixed_radix_NWC_in_place(  ZZ *NWC_data, ZZ *NWC_data_in, 
+                            long long n, long long radix_k1, long long radix_k2, ZZ phi, 
+                            ZZ modular,
+                            vector<vector<ZZ> > &memory){
+
+    long long k = ( log2(n) - radix_k2) / radix_k1;
+    //cout << "k = " << k << endl;
+    long long parameter_check = radix_k1 * k + radix_k2;
+    assert(parameter_check == log2(n));
+
+    long long pow_radix_k1 = pow(2, radix_k1);
+    cout << "pow_radix_k1 = " << pow_radix_k1 << endl;
+    ZZ W[pow_radix_k1 ] = {(ZZ)0};
+    ZZ tmp[pow_radix_k1] = {(ZZ)0} ;
+    ZZ tmp_array[pow_radix_k1] = {(ZZ)0};
+    BitOperate BR;
+    //k radix 2^k1 NTTs
+    for(long long l=0; l<k; l++){
+        cout << "<<<<<<<l>>>>>>>> = " << l << endl << "m_bar = ";
+        for(long long m=1; m<pow(2, radix_k1); m++){
+            long long m_bar = BR.BitReserve( (pow(2, radix_k1*l)-1) * pow(2, floor(log2(m))) + m, log2(n) ); 
+            cout << "m = " << m << endl;
+            W[m] = PowerMod(phi, m_bar, modular);
+            cout << "W[" << m << "] = " << W[m] << endl;
+        }
+        cout << "1231321" << endl;
+        cout << "----j means group number, i means numbers of BU in one group----" << endl;
+        for(int j=0; j<pow(2, radix_k1*l); j++){
+            long long j_bar = BR.BitReserve(j, radix_k1*l);
+            for(int i=0; i<pow(2, log2(n)- radix_k1*(l+1)); i++){
+                cout << "i = " << i << endl;
+                cout << "Group[" << j << "][" << i << "]= ";
+                for(int m=0; m<pow(2, radix_k1); m++){
+                    long long index = j_bar * pow(2, log2(n) - radix_k1*l) + m * pow(2, log2(n) - radix_k1*(l+1)) + i;
+                    ZZ mem_Read_Data = mem_in_place(memory, (ZZ)0, index, n, pow_radix_k1, 1, 0);
+                    tmp[m] = mem_Read_Data;
+                    cout << index << ", ";
+                }
+                cout << endl;
+                cout << "W[" << j << "][" << i << "] = ";
+                for(int i=0; i<pow(2, radix_k1);i++)
+                    cout << W[i] << " ";
+                cout << endl;
+                power2_NTT(tmp_array, tmp, pow(2, radix_k1), W, modular); 
+
+                for(int m=0; m<pow(2, radix_k1); m++){
+                    long long index = j_bar * pow(2, log2(n) - radix_k1*l) + m * pow(2, log2(n) - radix_k1*(l+1)) + i;
+                    mem_in_place(memory, tmp_array[m], index, n, pow_radix_k1, 0, 1);
+                }
+            }
+
+            for(int m=1; m<pow(2, radix_k1); m++){
+                long long Wc_degree = log2(n) - radix_k1 * l - floor(log2(m));
+                if(Wc_degree != log2(n))
+                    Wc_degree = pow(2, Wc_degree);
+                else 
+                    Wc_degree = 0;
+                ZZ Wc = PowerMod(phi, Wc_degree, modular);
+                W[m] = MulMod(W[m], Wc, modular);
+            }
+        }
+    }
+    
+    cout << "---*******************-------" << endl;
+    int pow_radix_k2 = pow(2, radix_k2);
+    ZZ W_k2[pow_radix_k2] = {(ZZ)0} ;
+    ZZ tmp_k2[pow_radix_k2] = {(ZZ)0} ;
+    ZZ tmp_array_k2[pow_radix_k2] = {(ZZ)0};
+    // radix_2^k2 NTT
+    for(int m=1; m<pow(2, radix_k2); m++){
+        long long idx = (pow(2, radix_k1*k) - 1) * pow(2, floor(log2(m))) + m;
+        long long m_bar = BR.BitReserve(idx, log2(n));
+        cout << "m_bar = " << m_bar << endl;
+        W_k2[m] = PowerMod(phi, m_bar, modular);
+    }
+    for(int j=0; j<pow(2, radix_k1 * k); j++){
+        cout << "j = " << j << endl;
+        long long j_bar = BR.BitReserve(j, radix_k1 * k);
+        for(int m=0; m<pow(2, radix_k2); m++){
+            int idx = j_bar * pow(2, radix_k2) + m;
+            cout << "idx = " << idx << endl;
+            ZZ mem_Read_Data_k2_stage = mem_in_place(memory, (ZZ)0, idx, n, pow_radix_k1, 1, 0);
+            tmp_k2[m] = mem_Read_Data_k2_stage;
+        }
+        cout << endl;
+        for(int i=0; i<pow(2, radix_k2); i++){
+            cout << "tmp_k2[" << i << "] = " << tmp_k2[i] << " ";
+        }
+        cout << endl;
+        power2_NTT(tmp_array_k2, tmp_k2, pow(2,radix_k2), W_k2, modular);
+        for(int m=0; m<pow(2, radix_k2); m++){
+            int idx = j_bar * pow(2, radix_k2) + m;
+            mem_in_place(memory, tmp_array_k2[m], idx, n, pow_radix_k1, 0, 1);
+            cout << "tmp_array_k2[" << m << "] = " << tmp_array_k2[m] << endl;
+        }
+        for(int m=1; m<pow(2, radix_k2); m++){
+            long long Wc_degree_k2 = radix_k2 - floor(log2(m));
+            Wc_degree_k2 = pow(2, Wc_degree_k2);
+            ZZ Wc_k2 = PowerMod(phi, Wc_degree_k2, modular);
+            W_k2[m] = MulMod(W_k2[m], Wc_k2, modular);
+        }
+    }
+
+    return 0;
+}
+
+void ZZ_top(   ZZ *NWC_data, ZZ *NWC_data_in, 
+            long long n, long long radix_k1, long long radix_k2, ZZ phi, 
+            ZZ modular,
+            vector<vector<ZZ> > &memory){
+    
+
+
+    long long k = ( log2(n) - radix_k2) / radix_k1;
+    //cout << "k = " << k << endl;
+    long long parameter_check = radix_k1 * k + radix_k2;
+    assert(parameter_check == log2(n));
+
+    long long pow_radix_k1 = pow(2, radix_k1);
+    ZZ W[pow_radix_k1] = {(ZZ)0};
+    ZZ tmp[pow_radix_k1] = {(ZZ)0} ;
+    ZZ tmp_array[pow_radix_k1] = {(ZZ)0};
+    BitOperate BR;
+
+    ofstream ofs_TF_based, ofs_TF_const;
+    ofs_TF_based.open("./tb_data/ZZ_top/TF_based_in.txt");
+    ofs_TF_const.open("./tb_data/ZZ_top/TF_const_in.txt");
+
+    if(!ofs_TF_based.is_open() || !ofs_TF_const.is_open()){
+        cout << "failed to open file.\n" << endl;
+    }else {
+        //k radix 2^k1 NTTs
+        for(long long l=0; l<k; l++){
+            cout << "<<<<<<<l>>>>>>>> = " << l << endl << "m_bar = ";
+            for(long long m=1; m<pow(2, radix_k1); m++){
+                long long m_bar = BR.BitReserve( (pow(2, radix_k1*l)-1) * pow(2, floor(log2(m))) + m, log2(n) ); 
+                W[m] = PowerMod(phi, m_bar, modular);
+            }
+            cout << "----j means group number, i means numbers of BU in one group----" << endl;
+            for(int j=0; j<pow(2, radix_k1*l); j++){
+                long long j_bar = BR.BitReserve(j, radix_k1*l);
+                for(int i=0; i<pow(2, log2(n)- radix_k1*(l+1)); i++){
+                    for(int m=0; m<pow(2, radix_k1); m++){
+                        long long index = j_bar * pow(2, log2(n) - radix_k1*l) + m * pow(2, log2(n) - radix_k1*(l+1)) + i;
+                        ZZ mem_Read_Data = mem_in_place(memory, (ZZ)0, index, n, pow_radix_k1, 1, 0);
+                        tmp[m] = mem_Read_Data;
+                    }
+
+                    power2_NTT(tmp_array, tmp, pow(2, radix_k1), W, modular);
+
+                
+                    for(int m=0; m<pow(2, radix_k1); m++){
+                        long long index = j_bar * pow(2, log2(n) - radix_k1*l) + m * pow(2, log2(n) - radix_k1*(l+1)) + i;
+                        mem_in_place(memory, tmp_array[m], index, n, pow_radix_k1, 0, 1);
+                    }
+                }
+                for(int m=1; m<pow(2, radix_k1); m++){
+                    long long Wc_degree = log2(n) - radix_k1 * l - floor(log2(m));
+                    if(Wc_degree != log2(n))
+                        Wc_degree = pow(2, Wc_degree);
+                    else 
+                        Wc_degree = 0;
+                    ZZ Wc = PowerMod(phi, Wc_degree, modular);
+                    W[m] = MulMod(W[m], Wc, modular);
+                }
+            }
+        }
+        for(int i=0; i<=log2(n); i++){
+            ZZ Wc;
+            if(i == log2(n)){
+                ofs_TF_const << std::hex << 1 << endl;
+            }else{
+                ofs_TF_const << std::hex << PowerMod(phi, pow(2, i), modular) << endl;
+            }
+        }
+
+        //---------------k2 stage------------------
+        cout << "---*******************-------" << endl;
+        long long pow_radix_k2 = pow(2, radix_k2);
+        ZZ W_k2[pow_radix_k2] = {(ZZ)0} ;
+        ZZ tmp_k2[pow_radix_k2] = {(ZZ)0} ;
+        ZZ tmp_array_k2[pow_radix_k2] = {(ZZ)0};
+        // radix_2^k2 NTT
+        for(int m=1; m<pow(2, radix_k2); m++){
+            long long idx = (pow(2, radix_k1*k) - 1) * pow(2, floor(log2(m))) + m;
+            long long m_bar = BR.BitReserve(idx, log2(n));
+            W_k2[m] = PowerMod(phi, m_bar, modular);
+        }
+        for(int j=0; j<pow(2, radix_k1 * k); j++){
+            long long j_bar = BR.BitReserve(j, radix_k1 * k);
+            for(int m=0; m<pow(2, radix_k2); m++){
+                int idx = j_bar * pow(2, radix_k2) + m;
+                ZZ mem_Read_Data_k2_stage = mem_in_place(memory, (ZZ)0, idx, n, pow_radix_k1, 1, 0);
+                tmp_k2[m] = mem_Read_Data_k2_stage;
+            }
+            cout << "j = " << j << endl;
+            power2_NTT(tmp_array_k2, tmp_k2, pow(2,radix_k2), W_k2, modular);
+            for(int m=0; m<pow(2, radix_k2); m++){
+                int idx = j_bar * pow(2, radix_k2) + m;
+                mem_in_place(memory, tmp_array_k2[m], idx, n, pow_radix_k1, 0, 1);
+            }
+            for(int m=1; m<pow(2, radix_k2); m++){
+                long long Wc_degree_k2 = radix_k2 - floor(log2(m));
+                Wc_degree_k2 = pow(2, Wc_degree_k2);
+                ZZ Wc_k2 = PowerMod(phi, Wc_degree_k2, modular);
+                W_k2[m] = MulMod(W_k2[m], Wc_k2, modular);
+            }
+        }
+        //---------generate TF---------
+        for(long long l=0; l<k; l++){
+            cout << "<<<<<<<l>>>>>>>> = " << l << endl << "m_bar = ";
+            for(long long m=1; m<pow(2, radix_k1); m++){
+                long long m_bar = BR.BitReserve( (pow(2, radix_k1*l)-1) * pow(2, floor(log2(m))) + m, log2(n) ); 
+                W[m] = PowerMod(phi, m_bar, modular);
+            }
+            cout << "----j means group number, i means numbers of BU in one group----" << endl;
+            for(int j=0; j<pow(2, radix_k1*l); j++){          
+                switch(l){
+                    case 0: {
+                        if(j < 1){
+                            for(long long m=1; m<pow(2, radix_k1); m++){
+                                ofs_TF_based << std::hex << W[m] << endl;
+                            }
+                        }
+                    }
+                    break;
+                    case 1: {
+                        if(j < 1){
+                            for(long long m=1; m<pow(2, radix_k1); m++){
+                                ofs_TF_based << std::hex << W[m] << endl;
+                            }
+                        }
+                    }
+                    break;
+                    case 2: {
+                        if(j < 2) {
+                            for(long long m=1; m<pow(2, radix_k1); m++){
+                                ofs_TF_based << std::hex << W[m] << endl;
+                            }
+                        }
+                    }
+                    break;
+                    default: break;
+                }
+                for(int m=1; m<pow(2, radix_k1); m++){
+                    long long Wc_degree = log2(n) - radix_k1 * l - floor(log2(m));
+                    if(Wc_degree != log2(n))
+                        Wc_degree = pow(2, Wc_degree);
+                    else 
+                        Wc_degree = 0;
+                    ZZ Wc = PowerMod(phi, Wc_degree, modular);
+                    W[m] = MulMod(W[m], Wc, modular);
+                }
+            }
+        }
+        //------generate TF part k2-----------
+        cout << "--------k2 TF---------" << endl;
+        for(int m=1; m<pow(2, radix_k2); m++){
+            long long idx = (pow(2, radix_k1*k) - 1) * pow(2, floor(log2(m))) + m;
+            long long m_bar = BR.BitReserve(idx, log2(n));
+            W_k2[m] = PowerMod(phi, m_bar, modular);
+        }
+        for(int j=0; j<pow(2, radix_k1 * k); j++){
+            if(j==0){
+                cout << "j = " << j << endl;
+                for(int m=1; m<pow(2, radix_k2); m++){
+                    ofs_TF_based << std::hex << W_k2[m] << endl;
+                    cout << "W_k2[" << m << "] = " << W_k2[m] << endl;
+                }
+                for(int i=pow(2, radix_k2); i<pow(2, radix_k1); i++){
+                    ofs_TF_based << std::hex << 0 << endl;
+                }
+            }
+            for(int m=1; m<pow(2, radix_k2); m++){
+                long long Wc_degree_k2 = radix_k2 - floor(log2(m));
+                Wc_degree_k2 = pow(2, Wc_degree_k2);
+                ZZ Wc_k2 = PowerMod(phi, Wc_degree_k2, modular);
+                W_k2[m] = MulMod(W_k2[m], Wc_k2, modular);
+            }
+        }
+    }
+}

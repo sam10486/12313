@@ -12,6 +12,8 @@ void R16_BU();
 void test_file_in_place();
 void barrett();
 void test_mem();
+void ZZ_NWC_in_place();
+void ZZ_top_tb();
 
 
 int main(){
@@ -31,9 +33,11 @@ int main(){
         cout << "| 6. test_file_in_place      | test_file_in_place.cpp     |" << endl;
         cout << "| 7. barrett                 | barrett.cpp                |" << endl;
         cout << "| 8. test_mem                | test_mem.cpp               |" << endl;
+        cout << "| 9. ZZ_NWC_in_place         | ZZ_NWC_in_place.cpp        |" << endl;
+        cout << "| 10. ZZ_top_tb              | ZZ_top_tb.cpp              |" << endl;
         cout << "+----------------------------+----------------------------+" << endl;
 
-        int input_parameter = 8;
+        int input_parameter = 10;
         int selection = 0;
         bool valid = true;
         do
@@ -49,7 +53,7 @@ int main(){
                 valid = true;
             }
             if (!valid) {
-                cout << "  [Beep~~] valid option: type 0 ~ 8" << endl;
+                cout << "  [Beep~~] valid option: type 0 ~ " << input_parameter << endl;
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
             }
@@ -87,7 +91,13 @@ int main(){
         case 8:
             test_mem();
             break;
-
+        
+        case 9:
+            ZZ_NWC_in_place();
+            break;
+        case 10:
+            ZZ_top_tb();
+            break;
         case 0:
             return 0;
         }

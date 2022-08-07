@@ -70,4 +70,23 @@ ZZ find_phi(long long m, ZZ modular);
 bool isPrime(ZZ n);
 ZZ find_prime(ZZ m, long long powerof2);
 ZZ precompute_value(ZZ modular, long long bit_width, long long alpha);
+
+long long power2_NTT(   ZZ *NTT_data, ZZ *data_in, long long n, 
+                        ZZ *twiddle_array, ZZ modular);
+
+long long mem_init_in_place(vector<vector<ZZ> > &memory_init, ZZ data_in, long long input_idx, long long N, long long radix,
+                            ZZ modular);
+
+ZZ mem_in_place(vector<vector<ZZ> > &memory, ZZ data_in, long long input_idx, long long N, long long radix,
+                        long long Read_mode, long long Write_mode);
+
+long long mixed_radix_NWC_in_place(  ZZ *NWC_data, ZZ *NWC_data_in, 
+                            long long n, long long radix_k1, long long radix_k2, ZZ phi, 
+                            ZZ modular,
+                            vector<vector<ZZ> > &memory);
+
+void ZZ_top(   ZZ *NWC_data, ZZ *NWC_data_in, 
+            long long n, long long radix_k1, long long radix_k2, ZZ phi, 
+            ZZ modular,
+            vector<vector<ZZ> > &memory);
 #endif
