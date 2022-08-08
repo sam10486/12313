@@ -18,6 +18,12 @@ long long ExpMod(long long a, long long exp, long long q);
 long long find_phi(long long n, long long modular); //// p = 1 mod 2n
 bool isPrime(long long n);
 long long find_prou(long long n, long long modular);
+
+long long find_n_rou(long long base, long long m, long long modular);
+bool check_prou(long long n_rou, long long m, long long modular);
+long long find_phi_fast(long long m, long long modular);
+
+
 vector<long long> phi_array(long long n, long long modular);
 vector<long long> phi_array_inv(long long n, long long modular);
 long long barrett_reduction(long long a, long long b, long long modular);

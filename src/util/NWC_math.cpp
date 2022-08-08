@@ -151,6 +151,52 @@ long long find_prou(long long n, long long modular){
     return prou;
 }
 
+long long find_n_rou(long long base, long long m, long long modular) // a^(p-1) = 1 (mod p)  ---> base^(modular-1) = 1 (mod modular)
+{
+	//cout << " m = " << m << " modular = "<< modular << endl; 
+	//assert(( modular % m ) == 1);
+	long long i;
+	long long n_rou;
+	i = (modular-1)/m ;   // base^(modular - 1) = base^( n * i ) = (base^i)^n = 1 (mod modular)
+	n_rou = PowerMod( base, i, modular);
+	//cout << " n_rou = " << n_rou << endl;
+	long long n_rou_tmp = n_rou;
+	return n_rou_tmp;
+}
+
+bool check_prou(long long n_rou, long long m, long long modular){ //check if n_rou^1, n_rou^2,...,n_rou^(m-1) is not equal 1;
+	bool is_prou = true;
+	long long tmp;
+	for(int i = 1; i < m; i++){
+		tmp = PowerMod( n_rou, i, modular);
+		if(tmp == 1){
+			is_prou = false;
+			break;
+		}
+	}
+	return is_prou;
+}
+
+long long find_phi_fast(long long m, long long modular){   
+	bool is_prou = false;
+	long long i = 2 ;
+	long long n_rou;
+	long long prou;
+    long long degree = 2 * m;
+	while(is_prou == false)
+	{
+		//cout << " 1 " << endl;
+		n_rou = find_n_rou(i, degree, modular);
+		//cout << " 2 " << endl;
+		is_prou = check_prou(n_rou, degree, modular);
+		//cout << " 3 " << endl;
+		i = i + 1;		
+	}
+	//cout << " base " << i-1 << endl;
+	prou = n_rou;
+	return prou;
+}
+
 //****************index reverse phi array*****************
 vector<long long> phi_array(long long n, long long modular){
     vector<long long> phi_array(n);

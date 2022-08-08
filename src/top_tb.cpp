@@ -27,7 +27,7 @@ void top_tb(){
     long long data_out[n];
     long long radix = 16;
     long long modular = 2013265921;
-    long long phi = find_phi(n, modular);
+    long long phi = find_phi_fast(n, modular);
     //long long phi = 243624;
     cout << "phi = " << phi << endl;
 
@@ -132,8 +132,8 @@ void top(   long long *NWC_data, long long *NWC_data_in,
     BitOperate BR;
 
     ofstream ofs_TF_based, ofs_TF_const;
-    ofs_TF_based.open("../tb_data/top/TF_based_in.txt");
-    ofs_TF_const.open("../tb_data/top/TF_const_in.txt");
+    ofs_TF_based.open("./tb_data/top/TF_based_in.txt");
+    ofs_TF_const.open("./tb_data/top/TF_const_in.txt");
 
     if(!ofs_TF_based.is_open() || !ofs_TF_const.is_open()){
         cout << "failed to open file.\n" << endl;
