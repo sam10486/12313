@@ -8,6 +8,7 @@
 #include <NTL/ZZ.h>
 #include <algorithm>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 using namespace NTL;
@@ -1910,9 +1911,10 @@ void ZZ_top(   ZZ *NWC_data, ZZ *NWC_data_in,
         for(int i=0; i<=log2(n); i++){
             ZZ Wc;
             if(i == log2(n)){
-                ofs_TF_const << std::hex << 1 << endl;
+                ofs_TF_const << 1 << endl;
             }else{
-                ofs_TF_const << std::hex << PowerMod(phi, pow(2, i), modular) << endl;
+                string string_const = ZZtoHex(PowerMod(phi, pow(2, i), modular));
+                ofs_TF_const << string_const << endl;
             }
         }
 
@@ -1961,7 +1963,8 @@ void ZZ_top(   ZZ *NWC_data, ZZ *NWC_data_in,
                     case 0: {
                         if(j < 1){
                             for(long long m=1; m<pow(2, radix_k1); m++){
-                                ofs_TF_based << std::hex << W[m] << endl;
+                                string string_W = ZZtoHex(W[m]);
+                                ofs_TF_based << string_W << endl;
                             }
                         }
                     }
@@ -1969,7 +1972,8 @@ void ZZ_top(   ZZ *NWC_data, ZZ *NWC_data_in,
                     case 1: {
                         if(j < 1){
                             for(long long m=1; m<pow(2, radix_k1); m++){
-                                ofs_TF_based << std::hex << W[m] << endl;
+                                string string_W = ZZtoHex(W[m]);
+                                ofs_TF_based << string_W << endl;
                             }
                         }
                     }
@@ -1977,7 +1981,8 @@ void ZZ_top(   ZZ *NWC_data, ZZ *NWC_data_in,
                     case 2: {
                         if(j < 2) {
                             for(long long m=1; m<pow(2, radix_k1); m++){
-                                ofs_TF_based << std::hex << W[m] << endl;
+                                string string_W = ZZtoHex(W[m]);
+                                ofs_TF_based << string_W << endl;
                             }
                         }
                     }
@@ -2006,11 +2011,12 @@ void ZZ_top(   ZZ *NWC_data, ZZ *NWC_data_in,
             if(j==0){
                 cout << "j = " << j << endl;
                 for(int m=1; m<pow(2, radix_k2); m++){
-                    ofs_TF_based << std::hex << W_k2[m] << endl;
+                    string string_W_k2_m = ZZtoHex(W_k2[m]);
+                    ofs_TF_based << string_W_k2_m << endl;
                     cout << "W_k2[" << m << "] = " << W_k2[m] << endl;
                 }
                 for(int i=pow(2, radix_k2); i<pow(2, radix_k1); i++){
-                    ofs_TF_based << std::hex << 0 << endl;
+                    ofs_TF_based << 0 << endl;
                 }
             }
             for(int m=1; m<pow(2, radix_k2); m++){
@@ -2021,4 +2027,45 @@ void ZZ_top(   ZZ *NWC_data, ZZ *NWC_data_in,
             }
         }
     }
+}
+
+string ZZtoHex(ZZ zz_tmp){
+    string string_tmp;
+    vector<char> tmp_hex; 
+    stringstream ss;
+
+    long tmp;
+    int length;
+    length = 16;
+    tmp_hex.resize(16);
+
+    for(int i =0; i < length; i++){
+        tmp  =  to_long(zz_tmp % 16);
+        
+        if(tmp == 0) tmp_hex[i] = '0'; 
+        if(tmp == 1) tmp_hex[i] = '1'; 
+        if(tmp == 2) tmp_hex[i] = '2'; 
+        if(tmp == 3) tmp_hex[i] = '3'; 
+        if(tmp == 4) tmp_hex[i] = '4'; 
+        if(tmp == 5) tmp_hex[i] = '5'; 
+        if(tmp == 6) tmp_hex[i] = '6'; 
+        if(tmp == 7) tmp_hex[i] = '7'; 
+        if(tmp == 8) tmp_hex[i] = '8'; 
+        if(tmp == 9) tmp_hex[i] = '9'; 
+        if(tmp == 10) tmp_hex[i] = 'a'; 
+        if(tmp == 11) tmp_hex[i] = 'b'; 
+        if(tmp == 12) tmp_hex[i] = 'c'; 
+        if(tmp == 13) tmp_hex[i] = 'd'; 
+        if(tmp == 14) tmp_hex[i] = 'e'; 
+        if(tmp == 15) tmp_hex[i] = 'f'; 
+        
+        zz_tmp = zz_tmp >> 4;
+    }
+    for(int i = 1;i <= length; i++){
+        ss << tmp_hex[length-i];
+    }
+    
+    string_tmp = ss.str();
+    
+    return string_tmp;
 }

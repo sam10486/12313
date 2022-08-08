@@ -95,4 +95,6 @@ void ZZ_top(   ZZ *NWC_data, ZZ *NWC_data_in,
             long long n, long long radix_k1, long long radix_k2, ZZ phi, 
             ZZ modular,
             vector<vector<ZZ> > &memory);
+
+string ZZtoHex(ZZ zz_tmp);
 #endif
