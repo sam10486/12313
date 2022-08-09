@@ -14,7 +14,7 @@ void barrett();
 void test_mem();
 void ZZ_NWC_in_place();
 void ZZ_top_tb();
-
+void ZZ_check_mem_out();
 
 int main(){
     while (true)
@@ -29,7 +29,7 @@ int main(){
         cout << "| 2. AE                      | AE.cpp                     |" << endl;
         cout << "| 3. test_file               | test_file.cpp              |" << endl;
         cout << "| 4. check_mem_out           | check_in_place_NWC.cpp     |" << endl;
-        cout << "| 5. R16_BU                  | R16_BU.cpp                 |" << endl;
+        cout << "| 5. ZZ_check_mem_out        | ZZ_check_mem_out.cpp       |" << endl;
         cout << "| 6. test_file_in_place      | test_file_in_place.cpp     |" << endl;
         cout << "| 7. barrett                 | barrett.cpp                |" << endl;
         cout << "| 8. test_mem                | test_mem.cpp               |" << endl;
@@ -77,7 +77,7 @@ int main(){
             break;
 
         case 5:
-            R16_BU();
+            ZZ_check_mem_out();
             break;
 
         case 6:

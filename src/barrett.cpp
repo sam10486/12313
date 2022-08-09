@@ -15,9 +15,9 @@ using namespace NTL;
 
 void barrett(){
     long long n = 8192;
-    ZZ modular = find_prime((ZZ)1,27);
+    ZZ modular = find_prime((ZZ)1,25);
     cout << "modular = " << modular << endl;
-    long long bit_width = 31;
+    long long bit_width = 28;
     long long alpha = bit_width + 1;
 
     ZZ value = precompute_value(modular, bit_width, alpha);

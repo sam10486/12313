@@ -26,7 +26,7 @@ void top_tb(){
     long long data_in[n];
     long long data_out[n];
     long long radix = 16;
-    long long modular = 2013265921;
+    long long modular = 167772161;
     long long phi = find_phi_fast(n, modular);
     //long long phi = 243624;
     cout << "phi = " << phi << endl;

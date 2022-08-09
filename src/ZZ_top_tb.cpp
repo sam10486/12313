@@ -22,7 +22,7 @@ void ZZ_top_tb(){
     ZZ data_in[n];
     ZZ data_out[n];
     long long radix = 16;
-    ZZ modular = (ZZ)2013265921;
+    ZZ modular = (ZZ)77309411329;
     ZZ phi = find_phi(n, modular);
     //long long phi = 243624;
     cout << "phi = " << phi << endl;

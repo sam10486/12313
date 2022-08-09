@@ -19,7 +19,7 @@ void ZZ_NWC_in_place(){
     ZZ data_in[n];
     ZZ data_out[n];
     long long radix = 16;
-    ZZ modular = (ZZ)2013265921;
+    ZZ modular = (ZZ)77309411329;
     ZZ phi = find_phi(n, modular);
     //ZZ phi = (ZZ)260512;
     cout << "phi = " << phi << endl;

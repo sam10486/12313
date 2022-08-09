@@ -1653,7 +1653,7 @@ long long power2_NTT(   ZZ *NTT_data, ZZ *data_in, long long n,
             W = twiddle_array[h+j];
             cout << "twiddle_array[" << h+j << "] = " << twiddle_array[h+j] << endl;
             for(int i=(j*n)/h; i< ( (2*j+1)*n ) / (2*h) ; i++){
-                ZZ tmp = PowerMod(W, data_in[i + n/(2*h)], modular);
+                ZZ tmp = MulMod(W, data_in[i + n/(2*h)], modular);
                 cout << "data_in[i] = " << data_in[i] << ", data_in[i + n/(2*h)] = " << data_in[i + n/(2*h)] << ", tmp = " << tmp << endl;
                 data_in[i + n/(2*h)] = SubMod(data_in[i], tmp, modular);
                 data_in[i] = AddMod(data_in[i], tmp, modular);
@@ -2036,8 +2036,8 @@ string ZZtoHex(ZZ zz_tmp){
 
     long tmp;
     int length;
-    length = 16;
-    tmp_hex.resize(16);
+    length = 13;
+    tmp_hex.resize(length);
 
     for(int i =0; i < length; i++){
         tmp  =  to_long(zz_tmp % 16);
