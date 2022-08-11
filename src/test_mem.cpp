@@ -43,12 +43,12 @@ void test_mem(){
             //cout << "i*BN+j = " << i*BN+j << endl;
         }
     }
-    cout << "**************" << endl;
+    /*cout << "**************" << endl;
     for(int i=0; i<BN; i++){
         for(int j=0; j<MA; j++){
             cout << mem[i][j] << endl;
         }
-    }
+    }*/
 
     cout << "QQ123" << endl;
     ofs_AGU_k1_BN.open("./tb_data/mem/mem_algo_bank.txt");
