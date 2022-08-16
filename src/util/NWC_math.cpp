@@ -1536,11 +1536,11 @@ long long mem_in_place(vector<vector<long long> > &memory, long long data_in, lo
 
     if(Read_mode){
         long long Read_data_out = memory[Bank][Addr];
-        cout << "(Bank , Addr, Read_data_out) = " << "( " << Bank << ", " << Addr << ", " << Read_data_out << " )" << endl;
+        cout << "(input_idx, Bank , Addr, Read_data_out) = " << "( " << input_idx << ", "<< Bank << ", " << Addr << ", " << Read_data_out << " )" << endl;
         return Read_data_out;
     }else if(Write_mode){
         memory[Bank][Addr] = data_in;
-        cout << "(Bank , Addr, W_data_in) = " << "( " << Bank << ", " << Addr << ", " << memory[Bank][Addr] << " )" << endl;
+        cout << "(input_idx, Bank , Addr, W_data_in) = " << "( " << input_idx << ", "<< Bank << ", " << Addr << ", " << memory[Bank][Addr] << " )" << endl;
     }
     return 0;
 
