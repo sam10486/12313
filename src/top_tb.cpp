@@ -183,8 +183,30 @@ void top(   long long *NWC_data, long long *NWC_data_in,
                 //cout << "Wc = " << 1 << endl;
                 ofs_TF_const << std::hex << 1 << endl;
             }else{
-                //cout << "Wc = " << ExpMod(phi, pow(2, i), modular) << endl;
-                ofs_TF_const << std::hex << ExpMod(phi, pow(2, i), modular) << endl;
+                cout << "Wc = " << ExpMod(phi, ExpMod(2, i, modular), modular) << endl;
+                ofs_TF_const << std::hex << ExpMod(phi, ExpMod(2, i, modular), modular) << endl;
+            }
+        }
+        cout << "additional" << endl;
+        for(int i=0; i<=log2(n); i++){
+            long long Wc;
+            if(i == log2(n)){
+                //cout << "Wc = " << 1 << endl;
+                ofs_TF_const << std::hex << 1 << endl;
+            }else{
+                cout << "Wc = " << ExpMod(ExpMod(phi, ExpMod(2, i, modular), modular), 2, modular) << endl;
+                ofs_TF_const << std::hex << ExpMod(ExpMod(phi, ExpMod(2, i, modular), modular), 2, modular) << endl;
+            }
+        }
+        cout << "additional a4" << endl;
+        for(int i=0; i<=log2(n); i++){
+            long long Wc;
+            if(i == log2(n)){
+                //cout << "Wc = " << 1 << endl;
+                ofs_TF_const << std::hex << 1 << endl;
+            }else{
+                cout << "Wc = " << ExpMod(ExpMod(phi, ExpMod(2, i, modular), modular), 4, modular) << endl;
+                ofs_TF_const << std::hex << ExpMod(ExpMod(phi, ExpMod(2, i, modular), modular), 4, modular) << endl;
             }
         }
 
@@ -261,7 +283,7 @@ void top(   long long *NWC_data, long long *NWC_data_in,
                     }
                     break;
                     case 2: {
-                        if(j < 2) {
+                        if(j < 3) {
                             for(long long m=1; m<pow(2, radix_k1); m++){
                                 ofs_TF_based << std::hex << W[m] << endl;
                                 //cout << "W[" << m << "] = " << W[m] << endl;
@@ -307,6 +329,16 @@ void top(   long long *NWC_data, long long *NWC_data_in,
                 Wc_degree_k2 = pow(2, Wc_degree_k2);
                 long long Wc_k2 = ExpMod(phi, Wc_degree_k2, modular);
                 W_k2[m] = MulMod(W_k2[m], Wc_k2, modular);
+            }
+            if(j < 3){
+                cout << "j = " << j << endl;
+                for(int m=1; m<pow(2, radix_k2); m++){
+                    ofs_TF_based << std::hex << W_k2[m] << endl;
+                    cout << "W_k2[" << m << "] = " << W_k2[m] << endl;
+                }
+                for(int i=pow(2, radix_k2); i<pow(2, radix_k1); i++){
+                    ofs_TF_based << std::hex << 0 << endl;
+                }
             }
         }
 
