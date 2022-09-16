@@ -210,6 +210,18 @@ void top(   long long *NWC_data, long long *NWC_data_in,
             }
         }
 
+        cout << "additional a16" << endl;
+        for(int i=0; i<=log2(n); i++){
+            long long Wc;
+            if(i == log2(n)){
+                //cout << "Wc = " << 1 << endl;
+                ofs_TF_const << std::hex << 1 << endl;
+            }else{
+                cout << "Wc = " << ExpMod(ExpMod(phi, ExpMod(2, i, modular), modular), 16, modular) << endl;
+                ofs_TF_const << std::hex << ExpMod(ExpMod(phi, ExpMod(2, i, modular), modular), 16, modular) << endl;
+            }
+        }
+
         //---------------k2 stage------------------
         cout << "---*******************-------" << endl;
         int pow_radix_k2 = pow(2, radix_k2);
@@ -330,7 +342,7 @@ void top(   long long *NWC_data, long long *NWC_data_in,
                 long long Wc_k2 = ExpMod(phi, Wc_degree_k2, modular);
                 W_k2[m] = MulMod(W_k2[m], Wc_k2, modular);
             }
-            if(j < 3){
+            if(j < 16){
                 cout << "j = " << j << endl;
                 for(int m=1; m<pow(2, radix_k2); m++){
                     ofs_TF_based << std::hex << W_k2[m] << endl;
