@@ -15,6 +15,8 @@ void test_mem();
 void ZZ_NWC_in_place();
 void ZZ_top_tb();
 void ZZ_check_mem_out();
+void CF();
+void test_file_mem_AE();
 
 int main(){
     while (true)
@@ -35,9 +37,11 @@ int main(){
         cout << "| 8. test_mem                | test_mem.cpp               |" << endl;
         cout << "| 9. ZZ_NWC_in_place         | ZZ_NWC_in_place.cpp        |" << endl;
         cout << "| 10. ZZ_top_tb              | ZZ_top_tb.cpp              |" << endl;
+        cout << "| 11. CF                     | CF.cpp                     |" << endl;
+        cout << "| 12. test_file_mem_AE       | test_file_mem_AE.cpp       |" << endl;
         cout << "+----------------------------+----------------------------+" << endl;
 
-        int input_parameter = 10;
+        int input_parameter = 12;
         int selection = 0;
         bool valid = true;
         do
@@ -63,40 +67,38 @@ int main(){
         case 1:
             top_tb();
             break;
-
         case 2:
             AE();
             break;
-
         case 3:
             test_file();
             break;
-
         case 4:
             check_in_place_NWC();
             break;
-
         case 5:
             ZZ_check_mem_out();
             break;
-
         case 6:
             test_file_in_place();
             break;
-
         case 7:
             barrett();
             break;
-
         case 8:
             test_mem();
-            break;
-        
+            break;      
         case 9:
             ZZ_NWC_in_place();
             break;
         case 10:
             ZZ_top_tb();
+            break;
+        case 11: 
+            CF();
+            break;
+        case 12: 
+            test_file_mem_AE();
             break;
         case 0:
             return 0;

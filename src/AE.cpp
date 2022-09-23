@@ -13,7 +13,7 @@ using namespace std;
 
 void AE(){
     long long degree_N = 16;
-    long long radix_r = 2;
+    long long radix_r = 4;
     long long num_stage_p;
     long long bit_width_s;
     long long relocation_group_g;
@@ -42,12 +42,12 @@ void AE(){
                 rotate(bit_array.begin(), bit_array.begin()+ bit_width_s*t , bit_array.end());
                 long long Data = VecToInt.VecToInt(bit_array, degree_N);
                 //cout << "Data = " << Data << endl;
-                cout << "Data_index = ";
+                /*cout << "Data_index = ";
                 cout << "( " ;					
 				for(int k = 0; k < radix_r ; k++ ){
 					cout << Data + k*(1<<(bit_width-bit_width_s-bit_width_s*t)) <<" ";	
 				}
-                cout << ") \n" ;
+                cout << ") \n" ;*/
             }
         }
     }

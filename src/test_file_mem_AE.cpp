@@ -15,17 +15,17 @@ using namespace NTL;
 
 void test_file_mem_AE(){
 
-    long long n = 64;
+    long long n = 16;
     long long data_in[n];
     long long data_out[n];
     long long radix_mem = 4;
-    long long modular = 12289;
+    long long modular = 97;
     long long phi = find_phi(n, modular);
     cout << "phi = " << phi << endl;
     BitOperate BR;
 
     ofstream ofs;
-    ofs.open("/home/ldap-users/siang/Desktop/NWC_software/check_AE/memory_ans.txt");
+    ofs.open("./tb_data/check_AE/memory_ans.txt");
 
     int BN = 2;
     int MA = (n/BN)/radix_mem;
