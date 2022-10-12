@@ -17,6 +17,7 @@ void ZZ_top_tb();
 void ZZ_check_mem_out();
 void CF();
 void test_file_mem_AE();
+void parameter_for_bluestein();
 
 int main(){
     while (true)
@@ -39,9 +40,10 @@ int main(){
         cout << "| 10. ZZ_top_tb              | ZZ_top_tb.cpp              |" << endl;
         cout << "| 11. CF                     | CF.cpp                     |" << endl;
         cout << "| 12. test_file_mem_AE       | test_file_mem_AE.cpp       |" << endl;
+        cout << "| 13. parameter_for_bluestein| parameter_for_bluestein.cpp|" << endl;
         cout << "+----------------------------+----------------------------+" << endl;
 
-        int input_parameter = 12;
+        int input_parameter = 13;
         int selection = 0;
         bool valid = true;
         do
@@ -99,6 +101,9 @@ int main(){
             break;
         case 12: 
             test_file_mem_AE();
+            break;
+        case 13:
+            parameter_for_bluestein();
             break;
         case 0:
             return 0;

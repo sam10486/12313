@@ -1572,6 +1572,26 @@ bool check_prou(ZZ n_rou, long long m, ZZ modular){ //check if n_rou^1, n_rou^2,
 	return is_prou;
 }
 
+ZZ find_prou(long long m, ZZ modular)
+{   
+	bool is_prou = false;
+	ZZ i = (ZZ)2 ;
+	ZZ n_rou;
+	ZZ prou;
+	while(is_prou == false)
+	{
+		//cout << " 1 " << endl;
+		n_rou = find_n_rou(i, m, modular);
+		//cout << " 2 " << endl;
+		is_prou = check_prou(n_rou, m, modular);
+		//cout << " 3 " << endl;
+		i = i + 1;		
+	}
+	//cout << " base " << i-1 << endl;
+	prou = n_rou;
+	return prou;
+}
+
 ZZ find_phi(long long m, ZZ modular)
 {   
 	bool is_prou = false;

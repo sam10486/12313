@@ -72,6 +72,7 @@ long long mem_in_place(vector<vector<long long> > &memory, long long data_in, lo
 //----------ZZ-------------
 ZZ find_n_rou(ZZ base, long long m, ZZ modular);
 bool check_prou(ZZ n_rou, long long m, ZZ modular);
+ZZ find_prou(long long m, ZZ modular);
 ZZ find_phi(long long m, ZZ modular);
 bool isPrime(ZZ n);
 ZZ find_prime(ZZ m, long long powerof2);
