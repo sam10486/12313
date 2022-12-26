@@ -12,8 +12,8 @@
 using namespace std;
 
 void AE(){
-    long long degree_N = 16;
-    long long radix_r = 4;
+    long long degree_N = 16384;
+    long long radix_r = 16;
     long long num_stage_p;
     long long bit_width_s;
     long long relocation_group_g;

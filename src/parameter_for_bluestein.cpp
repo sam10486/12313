@@ -15,7 +15,7 @@ using namespace NTL;
 
 void parameter_for_bluestein(){
 
-    long long n = 65536;
+    long long n = 8192;
     ZZ modular = find_prime((ZZ)1,25);
     cout << "modular = " << modular << endl;
 
