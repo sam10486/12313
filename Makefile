@@ -12,7 +12,7 @@ MAIN_OBJS	:= $(patsubst %.cpp, $(OBJ)/%.o, $(notdir $(MAIN_SOURCE)))
 CC = g++
 CFLAGS = -g -Wall
 
-LIBS	:= -lntl -lgmp -lm
+LIBS	:= -lntl -lgmp -lm -pthread
 INCLUDE	:= -I $(INC)
 TARGET	:= $(BIN)/main
 

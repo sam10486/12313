@@ -1,0 +1,54 @@
+**************stage = 0*************
+---------------relocation group i =0------------------
+(BC, BN, MA, length, tw_dg) = (0 , 0 , 0 , 0 , 0)
+Data = 0
+3 ------Data_index = ( 0 8 16 24 ), tf = (w^0, w^0, w^0, w^0, ) 
+(BC, BN, MA, length, tw_dg) = (2 , 1 , 1 , 2 , 2)
+Data = 2
+3 ------Data_index = ( 2 10 18 26 ), tf = (w^0, w^2, w^4, w^6, ) 
+(BC, BN, MA, length, tw_dg) = (4 , 1 , 2 , 4 , 4)
+Data = 4
+3 ------Data_index = ( 4 12 20 28 ), tf = (w^0, w^4, w^8, w^12, ) 
+(BC, BN, MA, length, tw_dg) = (6 , 0 , 3 , 6 , 6)
+Data = 6
+3 ------Data_index = ( 6 14 22 30 ), tf = (w^0, w^6, w^12, w^18, ) 
+---------------relocation group i =1------------------
+(BC, BN, MA, length, tw_dg) = (1 , 1 , 0 , 1 , 1)
+Data = 1
+3 ------Data_index = ( 1 9 17 25 ), tf = (w^0, w^1, w^2, w^3, ) 
+(BC, BN, MA, length, tw_dg) = (3 , 0 , 1 , 3 , 3)
+Data = 3
+3 ------Data_index = ( 3 11 19 27 ), tf = (w^0, w^3, w^6, w^9, ) 
+(BC, BN, MA, length, tw_dg) = (5 , 0 , 2 , 5 , 5)
+Data = 5
+3 ------Data_index = ( 5 13 21 29 ), tf = (w^0, w^5, w^10, w^15, ) 
+(BC, BN, MA, length, tw_dg) = (7 , 1 , 3 , 7 , 7)
+Data = 7
+3 ------Data_index = ( 7 15 23 31 ), tf = (w^0, w^7, w^14, w^21, ) 
+**************stage = 1*************
+---------------relocation group i =0------------------
+(BC, BN, MA, length, tw_dg) = (0 , 0 , 0 , 0 , 0)
+Data = 0
+1 ------Data_index = ( 0 2 4 6 ), tf = (w^0, w^0, w^0, w^0, ) 
+(BC, BN, MA, length, tw_dg) = (2 , 1 , 2 , 0 , 0)
+Data = 16
+1 ------Data_index = ( 16 18 20 22 ), tf = (w^0, w^0, w^0, w^0, ) 
+(BC, BN, MA, length, tw_dg) = (4 , 1 , 0 , 1 , 4)
+Data = 1
+1 ------Data_index = ( 1 3 5 7 ), tf = (w^0, w^4, w^8, w^12, ) 
+(BC, BN, MA, length, tw_dg) = (6 , 0 , 2 , 1 , 4)
+Data = 17
+1 ------Data_index = ( 17 19 21 23 ), tf = (w^0, w^4, w^8, w^12, ) 
+---------------relocation group i =1------------------
+(BC, BN, MA, length, tw_dg) = (1 , 1 , 1 , 0 , 0)
+Data = 8
+1 ------Data_index = ( 8 10 12 14 ), tf = (w^0, w^0, w^0, w^0, ) 
+(BC, BN, MA, length, tw_dg) = (3 , 0 , 3 , 0 , 0)
+Data = 24
+1 ------Data_index = ( 24 26 28 30 ), tf = (w^0, w^0, w^0, w^0, ) 
+(BC, BN, MA, length, tw_dg) = (5 , 0 , 1 , 1 , 4)
+Data = 9
+1 ------Data_index = ( 9 11 13 15 ), tf = (w^0, w^4, w^8, w^12, ) 
+(BC, BN, MA, length, tw_dg) = (7 , 1 , 3 , 1 , 4)
+Data = 25
+1 ------Data_index = ( 25 27 29 31 ), tf = (w^0, w^4, w^8, w^12, ) 

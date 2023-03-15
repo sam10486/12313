@@ -18,6 +18,7 @@ void ZZ_check_mem_out();
 void CF();
 void test_file_mem_AE();
 void parameter_for_bluestein();
+void bitrev();
 
 int main(){
     while (true)
@@ -41,9 +42,10 @@ int main(){
         cout << "| 11. CF                     | CF.cpp                     |" << endl;
         cout << "| 12. test_file_mem_AE       | test_file_mem_AE.cpp       |" << endl;
         cout << "| 13. parameter_for_bluestein| parameter_for_bluestein.cpp|" << endl;
+        cout << "| 14. bitrev                 | bitrev.cpp                 |" << endl;
         cout << "+----------------------------+----------------------------+" << endl;
 
-        int input_parameter = 13;
+        int input_parameter = 14;
         int selection = 0;
         bool valid = true;
         do
@@ -104,6 +106,9 @@ int main(){
             break;
         case 13:
             parameter_for_bluestein();
+            break;
+        case 14:
+            bitrev();
             break;
         case 0:
             return 0;
